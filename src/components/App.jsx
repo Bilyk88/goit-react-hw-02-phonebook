@@ -1,32 +1,71 @@
 import { Component } from 'react';
 import { ContactList } from './Contacts/ContactList';
-import contacts from '../contacts.json';
+import { nanoid } from 'nanoid';
+import initialContacts from '../contacts.json';
 import { Filter } from './Filter/Filter';
 import { ContactForm } from './ContactForm/ContactForm';
 
 export class App extends Component {
   state = {
-    contacts: [],
+    contacts: initialContacts,
     filter: '',
   };
 
+  updateFilter = newFilter => {
+    this.setState({ filter: newFilter });
+  };
+
+  addContact = newContact => {
+    this.setState(prevState => {
+      if (
+        prevState.contacts.some(contact => contact.name === newContact.name)
+      ) {
+        return alert(`${newContact.name} is already in contacts.`);
+      } else {
+        return {
+          contacts: [...prevState.contacts, { ...newContact, id: nanoid() }],
+        };
+      }
+    });
+  };
+
+  deleteContact = contactId => {
+    this.setState(prevState => {
+      return {
+        contacts: prevState.contacts.filter(
+          contact => contact.id !== contactId
+        ),
+      };
+    });
+  };
+
   render() {
+    const { contacts, filter } = this.state;
+
+    const filterContacts = contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
+
     return (
       <div
         style={{
           height: '100vh',
-          // display: 'flex',
-          // justifyContent: 'center',
-          // alignItems: 'center',
+          maxWidth: '460px',
+          padding: '15px',
           fontSize: 24,
           color: '#010101',
         }}
       >
         <h1>Phonebook</h1>
-        <ContactForm />
+        <ContactForm onAdd={this.addContact} />
         <h2>Contacts</h2>
-        <Filter />
-        <ContactList contacts={contacts} />
+        <Filter filter={filter} onUpdateFilter={this.updateFilter} />
+        {filterContacts.length > 0 && (
+          <ContactList
+            contacts={filterContacts}
+            onDelete={this.deleteContact}
+          />
+        )}
       </div>
     );
   }
