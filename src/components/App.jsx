@@ -24,17 +24,6 @@ export class App extends Component {
         : {
             contacts: [...prevState.contacts, { ...newContact, id: nanoid() }],
           };
-      //   if (
-      //     prevState.contacts.some(contact => contact.name === newContact.name)
-      //   ) {
-      //    alert(`${newContact.name} is already in contacts.`);
-      //     return prevState;
-      //   } else {
-      //     return {
-      //       contacts: [...prevState.contacts, { ...newContact, id: nanoid() }],
-      //     };
-      //   }
-      // }
     });
   };
 
