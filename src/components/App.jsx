@@ -17,15 +17,24 @@ export class App extends Component {
 
   addContact = newContact => {
     this.setState(prevState => {
-      if (
-        prevState.contacts.some(contact => contact.name === newContact.name)
-      ) {
-        return alert(`${newContact.name} is already in contacts.`);
-      } else {
-        return {
-          contacts: [...prevState.contacts, { ...newContact, id: nanoid() }],
-        };
-      }
+      return prevState.contacts.some(
+        contact => contact.name === newContact.name
+      )
+        ? alert(`${newContact.name} is already in contacts.`)
+        : {
+            contacts: [...prevState.contacts, { ...newContact, id: nanoid() }],
+          };
+      //   if (
+      //     prevState.contacts.some(contact => contact.name === newContact.name)
+      //   ) {
+      //    alert(`${newContact.name} is already in contacts.`);
+      //     return prevState;
+      //   } else {
+      //     return {
+      //       contacts: [...prevState.contacts, { ...newContact, id: nanoid() }],
+      //     };
+      //   }
+      // }
     });
   };
 
